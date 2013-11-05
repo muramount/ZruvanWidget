@@ -1,11 +1,11 @@
 <resources>
 
     <string name="app_name">ZruvanWidget</string>
-    <string name="no_date">----/--/--</string>
+    <string name="no_date">----/--/--（--）</string>
     <string name="no_time">--:--</string>
     <string name="battery_img_desc">battery</string>
     <string name="no_battery">---%</string>
-    <string name="wifi_label">Wi-Fi:</string>
-    <string name="gps_label">GPS:</string>
+    <string name="wifi_label">Wi-Fi SSID ： </string>
+    <string name="gps_label">GPS PROVIDER ： </string>
 
 </resources>

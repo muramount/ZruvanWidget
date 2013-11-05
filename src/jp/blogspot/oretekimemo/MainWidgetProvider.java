@@ -1,6 +1,7 @@
 
 package jp.blogspot.oretekimemo;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -11,15 +12,22 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Criteria;
+import android.location.LocationManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.IBinder;
 import android.widget.RemoteViews;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainWidgetProvider extends AppWidgetProvider {
 
     private static final String TAG = MainWidgetProvider.class.getName();
 
-    private final long interval = 60 * 1 * 1000; // 更新間隔
+    private final long interval = 60 * 1000; // 更新間隔
     private static final String ACTION_START_MY_ALARM = "jp.blogspot.oretekimemo.ZruvanWidget.ACTION_START_MY_ALARM";
 
     @Override
@@ -50,6 +58,11 @@ public class MainWidgetProvider extends AppWidgetProvider {
         if (intent.getAction().equals(ACTION_START_MY_ALARM)) {
 
             if (ACTION_START_MY_ALARM.equals(intent.getAction())) {
+
+                updateClock(context);
+                updateWifiInfo(context);
+                updateGpsInfo(context);
+
                 Intent serviceIntent = new Intent(context, MyService.class);
                 context.startService(serviceIntent);
             }
@@ -162,5 +175,80 @@ public class MainWidgetProvider extends AppWidgetProvider {
         }
 
     };
+
+    /**
+     * 日時表示の更新
+     * @param context
+     */
+    @SuppressLint("SimpleDateFormat")
+    private void updateClock(Context context){
+        ComponentName cn = new ComponentName(context, MainWidgetProvider.class);
+        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_main);
+
+        SimpleDateFormat sdf;
+
+        // 現在の時刻を取得
+        Date date = new Date();
+
+        // 日付
+        sdf = new SimpleDateFormat("yyyy/M/d（E）");
+        rv.setTextViewText(R.id.dateText, sdf.format(date));
+
+        // 時間
+        sdf = new SimpleDateFormat("kk:mm");
+        rv.setTextViewText(R.id.timeText, sdf.format(date));
+
+        AppWidgetManager.getInstance(context).updateAppWidget(cn, rv);
+
+        return;
+    }
+
+    /**
+     * Wi-Fi表示の更新
+     * @param context
+     */
+    private void updateWifiInfo(Context context) {
+        ComponentName cn = new ComponentName(context, MainWidgetProvider.class);
+        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_main);
+
+        WifiManager wifiManager = (WifiManager) context.getSystemService(context.WIFI_SERVICE);
+
+        StringBuffer wifiStr = new StringBuffer();
+        if(wifiManager.isWifiEnabled()) {
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            String ssid = wifiInfo.getSSID().replaceAll("\"", "");
+            wifiStr.append(ssid);
+        } else {
+            wifiStr.append("OFF");
+        }
+
+        rv.setTextViewText(R.id.wifiText, wifiStr.toString());
+
+        AppWidgetManager.getInstance(context).updateAppWidget(cn, rv);
+
+        return;
+    }
+
+    /**
+     * GPS表示の更新
+     * @param context
+     */
+    private void updateGpsInfo(Context context) {
+        ComponentName cn = new ComponentName(context, MainWidgetProvider.class);
+        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_main);
+
+        LocationManager  locationManager = (LocationManager)context.getSystemService(context.LOCATION_SERVICE);
+
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
+        String bestProvider = locationManager.getBestProvider(criteria, true);
+
+        rv.setTextViewText(R.id.gpsText, bestProvider);
+
+        AppWidgetManager.getInstance(context).updateAppWidget(cn, rv);
+
+        return;
+    }
 
 }
