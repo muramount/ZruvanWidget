@@ -16,14 +16,15 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
-        <service android:name="MainWidgetProvider$MyService" ></service>
-        <receiver android:name=".MainWidgetProvider" 
+        <service android:name="WidgetProviderBase$MyService" ></service>
+        
+        <receiver android:name=".WidgetProviderBase" 
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" 
-                android:resource="@xml/app_widget" />
+                android:resource="@xml/widget_4x2" />
         </receiver>
 
     </application>

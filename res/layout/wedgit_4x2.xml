@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/backgraund_border"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -10,7 +11,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="@string/no_date"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/timeText"
@@ -18,8 +19,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/dateText"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="-10dp"
+        android:layout_marginTop="-15dp"
         android:text="@string/no_time"
-        android:textSize="40sp" />
+        android:textSize="50sp" />
 
     <TextView
         android:id="@+id/textView3"
@@ -31,19 +34,22 @@
 
     <ImageView
         android:id="@+id/batteryImage"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView3"
+        android:layout_marginTop="5dp"
         android:contentDescription="@string/battery_img_desc"
-        android:src="@drawable/battery_0" />
+        android:src="@drawable/battery_0"
+        android:tint="#FFFFFFFF" />
 
     <TextView
         android:id="@+id/batteryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/textView3"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
         android:layout_toRightOf="@+id/batteryImage"
         android:text="@string/no_battery"
         android:textAppearance="?android:attr/textAppearanceSmall"
@@ -55,8 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/batteryImage"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="2dp"
         android:layout_toRightOf="@+id/batteryText" >
 
         <TextView
@@ -73,19 +78,20 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text=""
+            android:text="@string/no_data"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="12sp" />
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/linearLayout1"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="2dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="2dp"
         android:layout_below="@+id/linearLayout1" >
 
         <TextView
@@ -102,7 +108,37 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text=""
+            android:text="@string/no_data"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout2"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_below="@+id/linearLayout2" >
+
+        <TextView
+            android:id="@+id/versionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/version_label"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/versionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/no_data"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="13sp" />
 

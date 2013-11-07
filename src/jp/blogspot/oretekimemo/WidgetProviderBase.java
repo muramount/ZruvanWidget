@@ -17,26 +17,26 @@ import android.location.LocationManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
+import android.os.Build;
+import android.os.Debug;
 import android.os.IBinder;
 import android.widget.RemoteViews;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainWidgetProvider extends AppWidgetProvider {
+public class WidgetProviderBase extends AppWidgetProvider {
 
-    private static final String TAG = MainWidgetProvider.class.getName();
+    private static final String TAG = WidgetProviderBase.class.getName();
 
     private final long interval = 60 * 1000; // 更新間隔
     private static final String ACTION_START_MY_ALARM = "jp.blogspot.oretekimemo.ZruvanWidget.ACTION_START_MY_ALARM";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Debug.waitForDebugger();
+
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        /*
-         * ホームボタンを押したら、receiveを呼び出す タスクキラーなどで、
-         * アプリを強制終了された際、 Widgetも終了してしまうため。
-         */
         context.getApplicationContext().registerReceiver(new BroadcastReceiver() {
             @SuppressWarnings("unused")
             public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -45,7 +45,7 @@ public class MainWidgetProvider extends AppWidgetProvider {
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                MainWidgetProvider.this.onReceive(context, intent);
+                WidgetProviderBase.this.onReceive(context, intent);
             }
         }, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
@@ -62,6 +62,7 @@ public class MainWidgetProvider extends AppWidgetProvider {
                 updateClock(context);
                 updateWifiInfo(context);
                 updateGpsInfo(context);
+                updateVersionInfo(context);
 
                 Intent serviceIntent = new Intent(context, MyService.class);
                 context.startService(serviceIntent);
@@ -84,10 +85,10 @@ public class MainWidgetProvider extends AppWidgetProvider {
     }
 
     /**
-     * アラームマネージャをで更新間隔を設定する
+     * アラームマネージャで更新間隔を設定する
      */
     private void setAlarm(Context context) {
-        Intent alarmIntent = new Intent(context, MainWidgetProvider.class);
+        Intent alarmIntent = new Intent(context, WidgetProviderBase.class);
         alarmIntent.setAction(ACTION_START_MY_ALARM);
         PendingIntent operation = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -143,8 +144,8 @@ public class MainWidgetProvider extends AppWidgetProvider {
                 return;
             }
 
-            ComponentName cn = new ComponentName(context, MainWidgetProvider.class);
-            RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_main);
+            ComponentName cn = new ComponentName(context, WidgetProviderBase.class);
+            RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_4x2);
 
             int status = intent.getIntExtra("status", 0);
             int level  = intent.getIntExtra("level", 0);
@@ -182,8 +183,8 @@ public class MainWidgetProvider extends AppWidgetProvider {
      */
     @SuppressLint("SimpleDateFormat")
     private void updateClock(Context context){
-        ComponentName cn = new ComponentName(context, MainWidgetProvider.class);
-        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_main);
+        ComponentName cn = new ComponentName(context, WidgetProviderBase.class);
+        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_4x2);
 
         SimpleDateFormat sdf;
 
@@ -208,8 +209,8 @@ public class MainWidgetProvider extends AppWidgetProvider {
      * @param context
      */
     private void updateWifiInfo(Context context) {
-        ComponentName cn = new ComponentName(context, MainWidgetProvider.class);
-        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_main);
+        ComponentName cn = new ComponentName(context, WidgetProviderBase.class);
+        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_4x2);
 
         WifiManager wifiManager = (WifiManager) context.getSystemService(context.WIFI_SERVICE);
 
@@ -234,10 +235,10 @@ public class MainWidgetProvider extends AppWidgetProvider {
      * @param context
      */
     private void updateGpsInfo(Context context) {
-        ComponentName cn = new ComponentName(context, MainWidgetProvider.class);
-        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_main);
+        ComponentName cn = new ComponentName(context, WidgetProviderBase.class);
+        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_4x2);
 
-        LocationManager  locationManager = (LocationManager)context.getSystemService(context.LOCATION_SERVICE);
+        LocationManager  locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
 
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
@@ -245,6 +246,21 @@ public class MainWidgetProvider extends AppWidgetProvider {
         String bestProvider = locationManager.getBestProvider(criteria, true);
 
         rv.setTextViewText(R.id.gpsText, bestProvider);
+
+        AppWidgetManager.getInstance(context).updateAppWidget(cn, rv);
+
+        return;
+    }
+
+    /**
+     * Versions表示の更新
+     * @param context
+     */
+    private void updateVersionInfo(Context context) {
+        ComponentName cn = new ComponentName(context, WidgetProviderBase.class);
+        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_4x2);
+
+        rv.setTextViewText(R.id.versionText, context.getString(R.string.version_text, Build.VERSION.SDK_INT, Build.VERSION.RELEASE));
 
         AppWidgetManager.getInstance(context).updateAppWidget(cn, rv);
 
