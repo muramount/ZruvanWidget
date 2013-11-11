@@ -4,5 +4,6 @@
     android:minWidth="294dip"
     android:minHeight="144dip"
     android:initialLayout="@layout/wedgit_4x2"
-    android:updatePeriodMillis="0">
+    android:updatePeriodMillis="0"
+    android:previewImage="@drawable/preview" >
 </appwidget-provider>

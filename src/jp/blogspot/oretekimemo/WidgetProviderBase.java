@@ -18,7 +18,6 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
-import android.os.Debug;
 import android.os.IBinder;
 import android.widget.RemoteViews;
 
@@ -34,7 +33,7 @@ public class WidgetProviderBase extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Debug.waitForDebugger();
+        //Debug.waitForDebugger();
 
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         context.getApplicationContext().registerReceiver(new BroadcastReceiver() {
