@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/backgraund_border"
+    android:id="@+id/parentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -25,7 +25,7 @@
         android:textSize="50sp" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/borderText"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/timeText"
@@ -37,7 +37,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView3"
+        android:layout_below="@+id/borderText"
         android:layout_marginTop="5dp"
         android:contentDescription="@string/battery_img_desc"
         android:src="@drawable/battery_0"
@@ -47,7 +47,7 @@
         android:id="@+id/batteryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textView3"
+        android:layout_alignTop="@+id/borderText"
         android:layout_marginTop="10dp"
         android:layout_marginRight="5dp"
         android:layout_toRightOf="@+id/batteryImage"

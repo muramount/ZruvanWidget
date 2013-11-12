@@ -57,12 +57,6 @@ public class WidgetProviderBase extends AppWidgetProvider {
         if (intent.getAction().equals(ACTION_START_MY_ALARM)) {
 
             if (ACTION_START_MY_ALARM.equals(intent.getAction())) {
-
-                updateClock(context);
-                updateWifiInfo(context);
-                updateGpsInfo(context);
-                updateVersionInfo(context);
-
                 Intent serviceIntent = new Intent(context, MyService.class);
                 context.startService(serviceIntent);
             }
@@ -97,7 +91,7 @@ public class WidgetProviderBase extends AppWidgetProvider {
     }
 
     /**
-     * Serviceの内容
+     * Service
      */
     public static class MyService extends Service {
         @Override
@@ -113,6 +107,12 @@ public class WidgetProviderBase extends AppWidgetProvider {
             IntentFilter filter = new IntentFilter();
             filter.addAction(Intent.ACTION_BATTERY_CHANGED);
             registerReceiver(mBroadcastReceiver, filter);
+
+            updateClock(getBaseContext());
+            updateWifiInfo(getBaseContext());
+            updateGpsInfo(getBaseContext());
+            updateVersionInfo(getBaseContext());
+
         }
 
         @Override
@@ -133,7 +133,7 @@ public class WidgetProviderBase extends AppWidgetProvider {
     }
 
     /**
-     * Receiverの内容
+     * Broadcast Receiver
      */
     private static BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -181,7 +181,7 @@ public class WidgetProviderBase extends AppWidgetProvider {
      * @param context
      */
     @SuppressLint("SimpleDateFormat")
-    private void updateClock(Context context){
+    private static void updateClock(Context context){
         ComponentName cn = new ComponentName(context, WidgetProviderBase.class);
         RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_4x2);
 
@@ -207,7 +207,7 @@ public class WidgetProviderBase extends AppWidgetProvider {
      * Wi-Fi表示の更新
      * @param context
      */
-    private void updateWifiInfo(Context context) {
+    private static void updateWifiInfo(Context context) {
         ComponentName cn = new ComponentName(context, WidgetProviderBase.class);
         RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_4x2);
 
@@ -233,7 +233,7 @@ public class WidgetProviderBase extends AppWidgetProvider {
      * GPS表示の更新
      * @param context
      */
-    private void updateGpsInfo(Context context) {
+    private static void updateGpsInfo(Context context) {
         ComponentName cn = new ComponentName(context, WidgetProviderBase.class);
         RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_4x2);
 
@@ -255,7 +255,7 @@ public class WidgetProviderBase extends AppWidgetProvider {
      * Versions表示の更新
      * @param context
      */
-    private void updateVersionInfo(Context context) {
+    private static void updateVersionInfo(Context context) {
         ComponentName cn = new ComponentName(context, WidgetProviderBase.class);
         RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_4x2);
 

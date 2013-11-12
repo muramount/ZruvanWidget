@@ -1,5 +1,6 @@
 <resources>
 
+    <!-- Widget -->
     <string name="app_name">ZruvanWidget</string>
     <string name="no_date">----/--/--（--）</string>
     <string name="no_time">--:--</string>
@@ -10,5 +11,24 @@
     <string name="gps_label">GPS PROVIDER ： </string>
     <string name="version_label">OS VERSION ： </string>
     <string name="version_text">%2$s（API %1$d）</string>
+    
+    <!-- Configure -->
+    <string name="configure_title">@string/app_name</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="color">Color</string>
+    <string-array name="color_list">
+        <item>White</item>
+        <item>Black</item>
+        <item>Red</item>
+        <item>Green</item>
+        <item>Blue</item>
+        <item>Yellow</item>
+        <item>Purple</item>
+        <item>Brown</item>
+        <item>Pink</item>
+        <item>Orange</item>
+        <item>Gray</item>
+    </string-array>
     
 </resources>

@@ -5,5 +5,6 @@
     android:minHeight="144dip"
     android:initialLayout="@layout/wedgit_4x2"
     android:updatePeriodMillis="0"
+    android:configure="jp.blogspot.oretekimemo.WidgetConfigure"
     android:previewImage="@drawable/preview" >
 </appwidget-provider>
