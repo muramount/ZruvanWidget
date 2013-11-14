@@ -1,37 +1,58 @@
 package jp.blogspot.oretekimemo;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.RemoteViews;
 import android.widget.Spinner;
 
 public class WidgetConfigure extends Activity {
 
     private int mAppWidgetId;
+    private AppWidgetManager mWidgetManager;
+    private RemoteViews mRemoteViews;
+
+    private static final int[] TEXT_VIEW_ID_LIST = {
+        R.id.dateText,
+        R.id.timeText,
+        R.id.batteryText,
+        R.id.wifiLabel,
+        R.id.wifiText,
+        R.id.gpsLabel,
+        R.id.gpsText,
+        R.id.versionLabel,
+        R.id.versionText
+    };
 
     private Spinner mColorSpinner = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.configure);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.activity_configure);
 
         setResult(RESULT_CANCELED);
 
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-        }
+        mWidgetManager = AppWidgetManager.getInstance(this);
+        mRemoteViews = new RemoteViews(getPackageName(), R.layout.wedgit_layout_4x2);
+        mAppWidgetId = getIntent().getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+        mColorSpinner = (Spinner) findViewById(R.id.colorSpinner);
 
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
+        } else {
+            Intent intent = new Intent(this, WidgetConfigure.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, mAppWidgetId, intent, 0);
+            mRemoteViews.setOnClickPendingIntent(R.id.parentLayout, pendingIntent);
+            mWidgetManager.updateAppWidget(mAppWidgetId, mRemoteViews);
         }
-
-        mColorSpinner = (Spinner) findViewById(R.id.colorSpinner);
 
     }
 
@@ -63,13 +84,11 @@ public class WidgetConfigure extends Activity {
     public void onClickOk(View view) {
         setResult(RESULT_CANCELED);
 
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        RemoteViews rv = new RemoteViews(getPackageName(), R.layout.wedgit_4x2);
-        appWidgetManager.updateAppWidget(mAppWidgetId, changeStyle(rv));
+        mWidgetManager.updateAppWidget(mAppWidgetId, getChangeStyleView());
 
-        Intent resultValue = new Intent();
-        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-        setResult(RESULT_OK, resultValue);
+        Intent intent = new Intent();
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+        setResult(RESULT_OK, intent);
 
         finish();
     }
@@ -79,29 +98,18 @@ public class WidgetConfigure extends Activity {
         finish();
     }
 
-    private RemoteViews changeStyle(RemoteViews rv) {
+    private RemoteViews getChangeStyleView() {
         int position = mColorSpinner.getSelectedItemPosition();
 
-        int[] textViewIds = {
-                R.id.dateText,
-                R.id.timeText,
-                R.id.batteryText,
-                R.id.wifiLabel,
-                R.id.wifiText,
-                R.id.gpsLabel,
-                R.id.gpsText,
-                R.id.versionLabel,
-                R.id.versionText
-        };
-        for (int id : textViewIds) {
-            rv.setTextColor(id, getColorFromPostion(position));
+        for (int id : TEXT_VIEW_ID_LIST) {
+            mRemoteViews.setTextColor(id, getColorFromPostion(position));
         }
 
-        rv.setInt(R.id.borderText, "setBackgroundColor", getColorFromPostion(position));
+        mRemoteViews.setInt(R.id.borderText, "setBackgroundColor", getColorFromPostion(position));
 
-        rv.setInt(R.id.batteryImage, "setColorFilter", getColorFromPostion(position));
+        mRemoteViews.setInt(R.id.batteryImage, "setColorFilter", getColorFromPostion(position));
 
-        return rv;
+        return mRemoteViews;
     }
 
     private int getColorFromPostion(int position) {

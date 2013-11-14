@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="294dip"
     android:minHeight="144dip"
-    android:initialLayout="@layout/wedgit_4x2"
+    android:initialLayout="@layout/wedgit_layout_4x2"
     android:updatePeriodMillis="0"
     android:configure="jp.blogspot.oretekimemo.WidgetConfigure"
     android:previewImage="@drawable/preview" >

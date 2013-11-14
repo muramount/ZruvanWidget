@@ -34,8 +34,8 @@ public class WidgetProviderBase extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         //Debug.waitForDebugger();
-
         super.onUpdate(context, appWidgetManager, appWidgetIds);
+
         context.getApplicationContext().registerReceiver(new BroadcastReceiver() {
             @SuppressWarnings("unused")
             public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -99,10 +99,8 @@ public class WidgetProviderBase extends AppWidgetProvider {
             super.onCreate();
         }
 
-        @SuppressWarnings("deprecation")
         @Override
         public void onStart(Intent intent, int startId) {
-            super.onStart(intent, startId);
 
             IntentFilter filter = new IntentFilter();
             filter.addAction(Intent.ACTION_BATTERY_CHANGED);
@@ -144,7 +142,7 @@ public class WidgetProviderBase extends AppWidgetProvider {
             }
 
             ComponentName cn = new ComponentName(context, WidgetProviderBase.class);
-            RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_4x2);
+            RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_layout_4x2);
 
             int status = intent.getIntExtra("status", 0);
             int level  = intent.getIntExtra("level", 0);
@@ -183,7 +181,7 @@ public class WidgetProviderBase extends AppWidgetProvider {
     @SuppressLint("SimpleDateFormat")
     private static void updateClock(Context context){
         ComponentName cn = new ComponentName(context, WidgetProviderBase.class);
-        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_4x2);
+        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_layout_4x2);
 
         SimpleDateFormat sdf;
 
@@ -209,9 +207,9 @@ public class WidgetProviderBase extends AppWidgetProvider {
      */
     private static void updateWifiInfo(Context context) {
         ComponentName cn = new ComponentName(context, WidgetProviderBase.class);
-        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_4x2);
+        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_layout_4x2);
 
-        WifiManager wifiManager = (WifiManager) context.getSystemService(context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
         StringBuffer wifiStr = new StringBuffer();
         if(wifiManager.isWifiEnabled()) {
@@ -235,7 +233,7 @@ public class WidgetProviderBase extends AppWidgetProvider {
      */
     private static void updateGpsInfo(Context context) {
         ComponentName cn = new ComponentName(context, WidgetProviderBase.class);
-        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_4x2);
+        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_layout_4x2);
 
         LocationManager  locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
 
@@ -257,7 +255,7 @@ public class WidgetProviderBase extends AppWidgetProvider {
      */
     private static void updateVersionInfo(Context context) {
         ComponentName cn = new ComponentName(context, WidgetProviderBase.class);
-        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_4x2);
+        RemoteViews   rv = new RemoteViews(context.getPackageName(), R.layout.wedgit_layout_4x2);
 
         rv.setTextViewText(R.id.versionText, context.getString(R.string.version_text, Build.VERSION.SDK_INT, Build.VERSION.RELEASE));
 
